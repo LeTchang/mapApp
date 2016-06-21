@@ -44,13 +44,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         locationTableView.dataSource = self
         locationTableView.delegate = self
         
+        locationArray.append(Location(name: "42 - Paris", latitude: 48.896684, longitude: 2.318408))
+        locationArray.append(Location(name: "42 - USA", latitude: 37.548623, longitude: -122.059118))
+        
         let initialLocation = CLLocation(latitude: 48.896684, longitude: 2.318408)
         centerMapOnLocation(initialLocation)
     }
     
+    // MARK: - Other functions
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapVw.setRegion(coordinateRegion, animated: true)
+    }
+    
+    func showError() -> Void {
+        let alert = UIAlertController(title: "Error", message: "Wrong format", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.view.setNeedsLayout()
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     // MARK: - Show & Add external Views
@@ -101,14 +112,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-
-    // MARK: - Actions in AddView
-    func showError() -> Void {
-        let alert = UIAlertController(title: "Error", message: "Wrong format", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.view.setNeedsLayout()
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
     
     // MARK: - TableView functions
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,18 +120,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("locationCell", forIndexPath: indexPath) as! customTableViewCell
-        let longitude = String(locationArray[indexPath.row].longitude)
-        let latitude = String(locationArray[indexPath.row].latitude)
-        let location = "Coordinate: " + longitude + ", " + latitude
-        cell.nameText.text = locationArray[indexPath.row].name
+        let longitude = String(locationArray[indexPath.row].getLongitude())
+        let latitude = String(locationArray[indexPath.row].getLatitude())
+        let location = "Coord: " + longitude + ", " + latitude
+        cell.nameText.text = locationArray[indexPath.row].getName()
         cell.locationText.text = location
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let latitude = locationArray[indexPath.row].getLatitude()
+        let longitude = locationArray[indexPath.row].getLongitude()
+        hideLocationsView()
+        
+        centerMapOnLocation(CLLocation(latitude: latitude, longitude: longitude))
     }
-    
     
     // MARK: - IBActions
     @IBAction func onSearch(sender: AnyObject) {
@@ -160,7 +167,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             showError()
             return
         }
-        let new = Location(name: name, longitude: longitude, latitude: latitude)
+        let new = Location(name: name, latitude: longitude, longitude: latitude)
         locationArray.append(new)
         locationTableView.reloadData()
         hideAddView()
@@ -170,24 +177,3 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         hideAddView()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

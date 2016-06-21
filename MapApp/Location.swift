@@ -10,13 +10,26 @@ import UIKit
 
 class Location: NSObject {
 
-    let name: String
-    let longitude: Double
-    let latitude: Double
+    private let name: String
+    private let longitude: Double
+    private let latitude: Double
     
-    init(name: String, longitude: Double, latitude: Double) {
+    init(name: String, latitude: Double, longitude: Double) {
         self.name = name
         self.longitude = longitude
         self.latitude = latitude
+    }
+    
+    // MARK: - Getter
+    func getName() -> String {
+        return self.name
+    }
+    
+    func getLongitude() -> Double {
+        return self.longitude
+    }
+    
+    func getLatitude() -> Double {
+        return self.latitude
     }
 }
