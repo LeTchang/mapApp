@@ -36,19 +36,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        addVw.translatesAutoresizingMaskIntoConstraints = false
-        addVw.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
-        LocationsView.translatesAutoresizingMaskIntoConstraints = false
-        LocationsView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
-        locationTableView.dataSource = self
-        locationTableView.delegate = self
-        
-        locationArray.append(Location(name: "42 - Paris", latitude: 48.896684, longitude: 2.318408))
-        locationArray.append(Location(name: "42 - USA", latitude: 37.548623, longitude: -122.059118))
-        
-        let initialLocation = CLLocation(latitude: 48.896684, longitude: 2.318408)
-        centerMapOnLocation(initialLocation)
+        viewInit()
+        mapInit()
     }
     
     // MARK: - Other functions
@@ -62,6 +51,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         alert.view.setNeedsLayout()
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func mapInit() {
+        locationArray.append(Location(name: "42 - Paris", latitude: 48.896684, longitude: 2.318408))
+        locationArray.append(Location(name: "42 - USA", latitude: 37.548623, longitude: -122.059118))
+        mapVw.annotation("42 Paris", latitude: 48.896684, longitude: 2.318408)
+        mapVw.annotation("42 USA", latitude: 37.548623, longitude: -122.059118)
+        let initialLocation = CLLocation(latitude: 48.896684, longitude: 2.318408)
+        centerMapOnLocation(initialLocation)
+    }
+    
+    func viewInit() {
+        addVw.translatesAutoresizingMaskIntoConstraints = false
+        addVw.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        LocationsView.translatesAutoresizingMaskIntoConstraints = false
+        LocationsView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        locationTableView.dataSource = self
+        locationTableView.delegate = self
     }
     
     // MARK: - Show & Add external Views
@@ -170,14 +177,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let new = Location(name: name, latitude: latitude, longitude: longitude)
         locationArray.append(new)
         locationTableView.reloadData()
-        
-        let loc = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let anotation = MKPointAnnotation()
-        anotation.coordinate = loc
-        anotation.title = name
-        anotation.subtitle = "This is the location !!!"
-        mapVw.addAnnotation(anotation)
-        
+        mapVw.annotation(name, latitude: latitude, longitude: longitude)
         hideAddView()
     }
 
