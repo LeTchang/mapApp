@@ -122,7 +122,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCellWithIdentifier("locationCell", forIndexPath: indexPath) as! customTableViewCell
         let longitude = String(locationArray[indexPath.row].getLongitude())
         let latitude = String(locationArray[indexPath.row].getLatitude())
-        let location = "Coord: " + longitude + ", " + latitude
+        let location = "Coord: " + latitude + ", " + longitude
         cell.nameText.text = locationArray[indexPath.row].getName()
         cell.locationText.text = location
         return cell
@@ -159,17 +159,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             showError()
             return
         }
-        guard let longitude = Double(longitudeText.text!) else {
+        guard let longitude = Double(longitudeText.text!) where longitude < 180 && longitude > -180 else {
             showError()
             return
         }
-        guard let latitude = Double(latitudeText.text!) else {
+        guard let latitude = Double(latitudeText.text!) where latitude < 90 && latitude > -90 else {
             showError()
             return
         }
-        let new = Location(name: name, latitude: longitude, longitude: latitude)
+        let new = Location(name: name, latitude: latitude, longitude: longitude)
         locationArray.append(new)
         locationTableView.reloadData()
+        
+        let loc = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let anotation = MKPointAnnotation()
+        anotation.coordinate = loc
+        anotation.title = name
+        anotation.subtitle = "This is the location !!!"
+        mapVw.addAnnotation(anotation)
+        
         hideAddView()
     }
 
