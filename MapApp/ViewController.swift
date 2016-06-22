@@ -19,6 +19,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - External View outlets
     @IBOutlet var addVw: UIView!
     @IBOutlet var LocationsView: UIView!
+    @IBOutlet var blurView: UIView!
     
     // MARK: - TableView with LocationsView
     @IBOutlet weak var locationTableView: UITableView!
@@ -64,15 +65,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func viewInit() {
         addVw.translatesAutoresizingMaskIntoConstraints = false
-        addVw.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        addVw.backgroundColor = UIColor.clearColor()
         LocationsView.translatesAutoresizingMaskIntoConstraints = false
-        LocationsView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        LocationsView.backgroundColor = UIColor.clearColor()
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.backgroundColor = UIColor.clearColor()
+        locationTableView.backgroundColor = UIColor.clearColor()
         locationTableView.dataSource = self
         locationTableView.delegate = self
     }
     
     // MARK: - Show & Add external Views
     func showLocationsView() {
+        showBlurView()
         view.addSubview(LocationsView)
         let bottomConstraint = LocationsView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor)
         let leftConstraint = LocationsView.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
@@ -87,6 +92,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func hideLocationsView() {
+        self.hideBlurView()
         UIView.animateWithDuration(0.3, animations: {
             self.LocationsView.center.x -= self.screenWidth / 2
         }) { completed in
@@ -97,6 +103,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func showAddView() {
+        showBlurView()
         view.addSubview(addVw)
         let bottomConstraint = addVw.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor)
         let leftConstraint = addVw.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
@@ -111,11 +118,36 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func hideAddView() {
+        self.hideBlurView()
         UIView.animateWithDuration(0.3, animations: {
             self.addVw.alpha = 0
         }) { completed in
             if completed == true {
                 self.addVw.removeFromSuperview()
+            }
+        }
+    }
+    
+    func showBlurView() {
+        view.addSubview(blurView)
+        let bottomConstraint = blurView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor)
+        let leftConstraint = blurView.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
+        let topConstraint = blurView.topAnchor.constraintEqualToAnchor(view.topAnchor)
+        let rightConstraint = blurView.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
+        NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, topConstraint, rightConstraint])
+        view.layoutIfNeeded()
+        self.blurView.alpha = 0
+        UIView.animateWithDuration(0.3) {
+            self.blurView.alpha = 1
+        }
+    }
+    
+    func hideBlurView() {
+        UIView.animateWithDuration(0.3, animations: {
+            self.blurView.alpha = 0
+        }) { completed in
+            if completed == true {
+                self.blurView.removeFromSuperview()
             }
         }
     }
@@ -132,6 +164,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let location = "Coord: " + latitude + ", " + longitude
         cell.nameText.text = locationArray[indexPath.row].getName()
         cell.locationText.text = location
+        cell.backgroundColor = UIColor.clearColor()
         return cell
     }
     
@@ -146,6 +179,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - IBActions
     @IBAction func onSearch(sender: AnyObject) {
+        if addVw.window != nil {
+            hideAddView()
+        }
         if LocationsView.window != nil {
             hideLocationsView()
         } else {
@@ -154,6 +190,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func onAdd(sender: AnyObject) {
+        if LocationsView.window != nil {
+            hideLocationsView()
+        }
         if addVw.window != nil {
             hideAddView()
         } else {
@@ -162,7 +201,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func onAddAction(sender: AnyObject) {
-        guard let name = nameText.text?.trim() else {
+        guard let name = nameText.text?.trim() where name != "" else {
             showError()
             return
         }

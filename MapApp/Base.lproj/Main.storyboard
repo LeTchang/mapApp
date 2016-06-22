@@ -49,6 +49,7 @@
                         <outlet property="LocationsView" destination="fwE-wK-UkF" id="L05-Sk-Chl"/>
                         <outlet property="addButton" destination="r30-bL-nib" id="Qb0-pr-up5"/>
                         <outlet property="addVw" destination="Lum-Zc-D38" id="qY1-6w-ajH"/>
+                        <outlet property="blurView" destination="UPI-sD-QAR" id="evO-zA-ocj"/>
                         <outlet property="latitudeText" destination="eiH-lQ-ocM" id="TvK-Gz-vLH"/>
                         <outlet property="locationTableView" destination="4sA-Gs-5Bz" id="Uep-kD-Mv5"/>
                         <outlet property="longitudeText" destination="9YW-yh-aXf" id="XQ9-rM-e2H"/>
@@ -58,6 +59,27 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="UPI-sD-QAR">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AWc-ww-VB7">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Q8n-Dy-FwZ">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </view>
+                            <blurEffect style="light"/>
+                        </visualEffectView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="AWc-ww-VB7" secondAttribute="trailing" id="1YN-HA-56v"/>
+                        <constraint firstAttribute="bottom" secondItem="AWc-ww-VB7" secondAttribute="bottom" id="44e-wv-p1D"/>
+                        <constraint firstItem="AWc-ww-VB7" firstAttribute="leading" secondItem="UPI-sD-QAR" secondAttribute="leading" id="BXY-nM-Lry"/>
+                        <constraint firstItem="AWc-ww-VB7" firstAttribute="top" secondItem="UPI-sD-QAR" secondAttribute="top" id="TIm-40-fJa"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" id="fwE-wK-UkF" userLabel="Locations View">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="356"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -65,6 +87,7 @@
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4sA-Gs-5Bz">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="356"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <prototypes>
                                 <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="locationCell" rowHeight="80" id="2QP-ML-JV6" customClass="customTableViewCell" customModule="MapApp" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="28" width="240" height="80"/>
@@ -90,6 +113,7 @@
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="yiu-k2-s2K" secondAttribute="trailing" id="AOj-Nn-X5i"/>
                                             <constraint firstItem="yiu-k2-s2K" firstAttribute="top" secondItem="7yJ-sS-dXe" secondAttribute="top" id="QvT-oa-2Jy"/>
@@ -99,6 +123,7 @@
                                             <constraint firstItem="yiu-k2-s2K" firstAttribute="leading" secondItem="7yJ-sS-dXe" secondAttribute="leading" constant="8" id="urY-bt-KUC"/>
                                         </constraints>
                                     </tableViewCellContentView>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <connections>
                                         <outlet property="locationText" destination="xzB-G5-dw1" id="aiO-LW-FgD"/>
                                         <outlet property="nameText" destination="yiu-k2-s2K" id="YoU-84-XWE"/>
